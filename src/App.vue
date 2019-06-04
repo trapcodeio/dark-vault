@@ -32,7 +32,7 @@
                         <div class="col">
                             <div class="form-group">
                                 <input @focusin.prevent="focusedIn" @focusout.prevent="focusedOut" v-model="search"
-                                       type="text" :placeholder="currentFolder" class="form-control">
+                                       type="text" :placeholder="currentFolder" class="form-control shadow-sm">
                             </div>
                         </div>
 
