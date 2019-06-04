@@ -9413,10 +9413,10 @@ x-xss-protection@1.1.0:
   resolved "https://registry.yarnpkg.com/x-xss-protection/-/x-xss-protection-1.1.0.tgz#4f1898c332deb1e7f2be1280efb3e2c53d69c1a7"
   integrity sha512-rx3GzJlgEeZ08MIcDsU2vY2B1QEriUKJTSiNHHUIem6eg9pzVOr2TL3Y4Pd6TMAM5D5azGjcxqI62piITBDHVg==
 
-xpresser@^0.0.34:
-  version "0.0.34"
-  resolved "https://registry.yarnpkg.com/xpresser/-/xpresser-0.0.34.tgz#2ca9811dd6d1afe75346789a9b5eb7a53dee4f18"
-  integrity sha512-pNW+hQPXWZ5thZnAiOra/0FnTQnznKrmq0GERzFwMt6joWvVOQx6527PsgjSGsu0nyCL7EM3kLzzbIEmrOeJ/Q==
+xpresser@^0.0.35:
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/xpresser/-/xpresser-0.0.35.tgz#30f7d66fc2f22aaf4dad8d094b6c422e9372648a"
+  integrity sha512-4nXTsDnyuIM8zjMLXV/9wuihTbFFpOVcb7KWOe9/N3NPb22s8beRe0aUsc2Pisw53FPziXVXLCTSwnR1y3q0mg==
   dependencies:
     "@xpresser/auth" "^0.0.9"
     "@xpresser/router" "^0.0.8"
