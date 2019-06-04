@@ -24,7 +24,11 @@ class FolderController extends $.controller {
             hasFolderPath = true;
         }
 
-        if(!fs.existsSync(folder)){
+        if (folder.substr(-1) === '/') {
+            folder = folder.substr(0, folder.length - 1);
+        }
+
+        if (!fs.existsSync(folder)) {
             return x.toApiFalse(`Folder does not exists: {${folder}}`)
         }
 

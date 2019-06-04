@@ -7,7 +7,7 @@ Will grow by the day.
 After clone
 1. `yarn install`
 2. `yarn build`
-3. `yarn start`
+3. `yarn start` or `xjs start` if you have the xjs-cli installed.
 
 ## Note
 Before you start make sure you have`dist` folder.
