@@ -71,6 +71,8 @@
 </template>
 
 <script>
+    import slash from "slash";
+
     export default {
         data() {
             return {
@@ -141,7 +143,7 @@
                     yes(data) {
                         self.errorMessage = '';
                         self.files = data.files;
-                        self.currentFolder = data.folder;
+                        self.currentFolder = data.folder.replace('\\', '/');
                     },
 
                     no(result){

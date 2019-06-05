@@ -1,4 +1,7 @@
 const fs = require("fs");
+const path = require("path");
+const slash = require("slash");
+
 
 /**
  * FolderController
@@ -24,9 +27,10 @@ class FolderController extends $.controller {
             hasFolderPath = true;
         }
 
-        if (folder.substr(-1) === '/') {
-            folder = folder.substr(0, folder.length - 1);
-        }
+
+        // Resolve folder to match os paths
+        folder = path.resolve(slash(folder));
+
 
         if (!fs.existsSync(folder)) {
             return x.toApiFalse(`Folder does not exists: {${folder}}`)
@@ -37,7 +41,8 @@ class FolderController extends $.controller {
         let files = [];
         for (let i = 0; i < folderFiles.length; i++) {
             const file = folderFiles[i];
-            const fullPath = hasFolderPath ? (folder + '/' + file) : $.path.base(file);
+            const fullPath = slash(path.resolve(hasFolderPath ? (folder + '/' + file) : $.path.base(file)));
+
             files.push({
                 name: file,
                 fullPath,
