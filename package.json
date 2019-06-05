@@ -17,7 +17,7 @@
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vue-trap-pack": "^0.0.5",
-    "xpresser": "^0.0.35"
+    "xpresser": "^0.0.36"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.8.0",
