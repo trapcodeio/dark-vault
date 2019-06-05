@@ -143,7 +143,7 @@
                     yes(data) {
                         self.errorMessage = '';
                         self.files = data.files;
-                        self.currentFolder = data.folder.replace('\\', '/');
+                        self.currentFolder = data.folder.replace(/\\/g, '/');
                     },
 
                     no(result){

@@ -51,6 +51,20 @@ class FolderController extends $.controller {
         }
         return x.toApi({files, folder});
     }
+
+    distNotFound(x) {
+        const msg = "Dist folder not found! Run 'yarn build' to build your files then restart server.";
+        x.res.status(404);
+
+        if (x.req.xhr) {
+            return x.toApiFalse({
+                msg
+            });
+        } else {
+            return x.res.send(msg);
+        }
+
+    }
 }
 
 
