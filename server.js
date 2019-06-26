@@ -1,8 +1,11 @@
+require('dotenv').config();
 const xpresser = require("xpresser");
+
+const env = process.env;
 
 xpresser({
     server: {
-      port: 7777
+      port: env.APP_PORT
     },
     paths: {
         base: __dirname,
