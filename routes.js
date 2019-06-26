@@ -19,4 +19,6 @@ route.path('/api', () => {
  */
 if (!fs.existsSync($.path.base('dist'))) {
     route.all('/*', 'Folder@distNotFound');
+} else {
+    route.all('/*', 'Folder@index');
 }

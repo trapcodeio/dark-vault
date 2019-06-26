@@ -3,6 +3,10 @@ const path = require("path");
 const slash = require("slash");
 
 
+const DistFolder = $.path.base('dist');
+const HasDistFolder = fs.existsSync(DistFolder);
+
+
 /**
  * FolderController
  * @class
@@ -16,6 +20,14 @@ class FolderController extends $.controller {
      */
     static middleware() {
         return {}
+    }
+
+    index({res}) {
+        if (!HasDistFolder) {
+            return res.send("Dist Folder Not Found!");
+        } else {
+            return res.sendFile(DistFolder + '/index.html')
+        }
     }
 
     static scan(x) {
