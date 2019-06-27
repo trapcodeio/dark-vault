@@ -2,17 +2,17 @@ const fs = require("fs");
 const path = require("path");
 
 /**
-* FileController
-* @class
-* @extends $.controller
-*/
+ * FileController
+ * @class
+ * @extends $.controller
+ */
 class FileController extends $.controller {
 
     /**
-    * middleware - Set Middleware
-    * @returns {Object}
-    */
-    static middleware(){
+     * middleware - Set Middleware
+     * @returns {Object}
+     */
+    static middleware() {
         return {}
     }
 
@@ -20,9 +20,11 @@ class FileController extends $.controller {
         const encodedPath = x.get("file", null);
         const decodedPath = $.base64.decode(encodedPath);
         const exists = fs.existsSync(decodedPath);
+        const directory = path.dirname(decodedPath);
+
 
         let content = null;
-        if(exists && fs.lstatSync(decodedPath).isFile()){
+        if (exists && fs.lstatSync(decodedPath).isFile()) {
             content = fs.readFileSync(decodedPath).toString()
         }
 
@@ -30,6 +32,8 @@ class FileController extends $.controller {
             exists,
             fullPath: decodedPath,
             encodedPath,
+            directory,
+            encodedDirectory: $.base64.encode(directory),
             content
         });
     }

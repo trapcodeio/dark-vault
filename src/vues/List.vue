@@ -1,15 +1,17 @@
 <template>
     <div class="container">
-        <div class="card mt-5 shadow">
+        <div class="card mt-3 mt-lg-5 shadow is-fixed-height">
             <div class="card-body">
                 <ol v-if="currentFolderToArray.length" class="breadcrumb">
                     <template v-for="(path, pathId) in currentFolderToArray">
 
                         <template v-if="currentFolderToArray[pathId+1]===undefined">
-                            <li class="breadcrumb-item active">{{path}}</li>
+                            <li :key="pathId" class="breadcrumb-item active">{{path}}</li>
                         </template>
+
                         <template v-else>
-                            <li class="breadcrumb-item"><a @click.prevent="fromBreadcrumb(pathId)" href="#">{{path}}</a>
+                            <li :key="pathId" class="breadcrumb-item">
+                                <a href="#" @click.prevent="fromBreadcrumb(pathId)">{{path}}</a>
                             </li>
                         </template>
 
@@ -23,11 +25,13 @@
                         </div>
                     </div>
                 </template>
+
                 <div class="mt-4" v-if="!isLoading">
                     <div class="row">
                         <div class="col-auto">
-                            <a href="#" @click.prevent="goBack" class="btn btn-dark btn-sm mt-2"><i
-                                    class="fas fa-arrow-left "></i> Go Back</a>
+                            <button @click.prevent="goBack" class="btn btn-dark btn-sm mt-2"><i
+                                    class="fas fa-arrow-left "></i> Go Back
+                            </button>
                         </div>
                         <div class="col">
                             <div class="form-group">
@@ -48,25 +52,25 @@
                         </div>
                     </div>
 
-                    <template v-for="folder  in files">
-                        <template v-if="folder.isDir">
-                            <a :href="folder.fullPath" :title="folder.fullPath"
-                               @click.prevent="loadFolder(folder.fullPath)">
-                                <i class="fas fa-folder mr-3"></i><span>{{folder.name}}</span>
-                            </a>
+                    <template v-for="(folder, folderIndex)  in files">
+                        <div :key="folderIndex" v-if="folder.isDir">
+                            <router-link :to="rl('folder', {folder_path: folder.encodedPath})" :title="folder.fullPath">
+                                <i class="fas fa-folder mr-3 text-dark"></i>
+                                <span>{{folder.name}}</span>
+                            </router-link>
                             <hr class="mt-1">
-                        </template>
+                        </div>
                     </template>
 
-                    <template v-for="file in files">
-                        <template v-if="!file.isDir">
+                    <template v-for="(file, fileIndex) in files">
+                        <div :key="fileIndex" v-if="!file.isDir">
                             <router-link :to="rl('file', {file_path: file.encodedPath})" :title="file.fullPath">
                                 <i class="fa fa-file fa-1x mr-3 text-muted"></i>
                                 <span v-if="file.name[0]==='.'" class="text-muted">{{file.name}}</span>
                                 <span v-else>{{file.name}}</span>
                             </router-link>
                             <hr class="mt-1">
-                        </template>
+                        </div>
                     </template>
 
                 </div>
@@ -125,7 +129,7 @@
             const self = this;
             setTimeout(() => {
                 self.loadFolder();
-            }, 500);
+            }, 300);
         },
 
         methods: {
@@ -134,15 +138,21 @@
                     this.isLoading = true;
                 }
 
-                let params = {};
-                if (typeof id === "number") {
-                    params.folder = this.files[id].fullPath;
-                } else if (typeof id == "string") {
-                    params.folder = id;
+                let folder = undefined;
+                if (typeof id === "string") {
+                    folder = id;
+                } else {
+                    if (this.$route.params.hasOwnProperty('folder_path')) {
+                        folder = atob(this.$route.params.folder_path);
+                    }
+
+                    if (folder === 'base://') {
+                        folder = undefined;
+                    }
                 }
 
                 const self = this;
-                this.$api.postTo('api/folder/scan', params, {
+                this.$api.postTo('api/folder/scan', {folder}, {
                     yes(data) {
                         self.errorMessage = '';
                         self.files = data.files;
@@ -160,16 +170,20 @@
                 })
             },
 
-            fromBreadcrumb(stopAtId) {
+            fromBreadcrumb(stopAtId, push = true) {
                 let currentPath = this.currentFolderToArray;
 
-                const folder = currentPath.slice(0, stopAtId + 1).join('/');
+                const folder = btoa(currentPath.slice(0, stopAtId + 1).join('/'));
 
-                return this.loadFolder(folder);
+                if (push) {
+                    this.$router.push(this.rl('folder', {folder_path: folder}))
+                } else {
+                    return folder;
+                }
             },
 
             goBack() {
-                return this.fromBreadcrumb(this.currentFolderToArray.length - 2)
+                return this.fromBreadcrumb(this.currentFolderToArray.length - 2);
             },
 
             focusedIn() {

@@ -1,0 +1,47 @@
+
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+$my-dark: lighten(#1b1e21, 5%);
+
+html, body {
+  background-color: $my-dark;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  background-color: darken(#fafafa, 5%);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: fade_out($my-dark, 0.1);
+  border-radius: 5px
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: fade_out($my-dark, 0.3);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: lighten($my-dark, 3%);
+}
+
+
+a {
+  color: $my-dark;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: $primary;
+}
+
+.is-fixed-height {
+  overflow: auto;
+  height: 90vh;
+  max-height: 90vh;
+}

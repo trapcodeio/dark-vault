@@ -3,6 +3,10 @@ const xpresser = require("xpresser");
 
 const env = process.env;
 
+/**
+ * Yes am a comment!
+ */
+
 xpresser({
     server: {
       port: env.APP_PORT
@@ -11,5 +15,8 @@ xpresser({
         base: __dirname,
         backend: "base://",
         public: "dist"
+    },
+    response: {
+        cacheFiles: true
     }
 });

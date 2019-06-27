@@ -34,6 +34,7 @@ class FolderController extends $.controller {
         // eslint-disable-next-line no-undef
         let hasFolderPath = x.get("folder", false);
         let folder = $.path.base();
+
         if (hasFolderPath !== false) {
             folder = hasFolderPath;
             hasFolderPath = true;

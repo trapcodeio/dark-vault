@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Index from './vues/Index';
 import View from './vues/View';
 import List from './vues/List'
 
@@ -10,14 +11,19 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      name: 'list',
+      name: 'index',
       path: '/',
-      component: List,
+      component: Index,
     },
     {
       name: 'file',
       path: '/file/:file_path',
       component: View,
+    },
+    {
+      name: 'folder',
+      path: '/folder/:folder_path',
+      component: List,
     }
   ]
 })
