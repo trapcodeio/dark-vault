@@ -53,23 +53,33 @@
                     </div>
 
                     <template v-for="(folder, folderIndex)  in files">
-                        <div :key="folderIndex" v-if="folder.isDir">
-                            <router-link :to="rl('folder', {folder_path: folder.encodedPath})" :title="folder.fullPath">
+                        <div :key="folderIndex" v-if="folder.isDir"
+                             @dragenter.prevent="mouseOnFolder(folderIndex)"
+                             @dragleave.prevent="mouseOffFolder(folderIndex)"
+                             @dragover.prevent="() =>false"
+                             @drop="dropOnFolder"
+                             :class="dragDestination===folderIndex?'folder-list on-me':'folder-list'">
+                            <router-link :draggable="false" :to="rl('folder', {folder_path: folder.encodedPath})"
+                                         :title="folder.fullPath">
                                 <i class="fas fa-folder mr-3 text-dark"></i>
                                 <span>{{folder.name}}</span>
                             </router-link>
-                            <hr class="mt-1">
                         </div>
                     </template>
 
                     <template v-for="(file, fileIndex) in files">
-                        <div :key="fileIndex" v-if="!file.isDir">
-                            <router-link :to="rl('file', {file_path: file.encodedPath})" :title="file.fullPath">
-                                <i class="fa fa-file fa-1x mr-3 text-muted"></i>
+                        <div :key="fileIndex" v-if="!file.isDir"
+                             draggable="true"
+                             @dragend="onFileDrop"
+                             @dragstart="onFileDrag(fileIndex)"
+                             @dragover="onFileHover"
+                             class="file-list">
+                            <router-link :draggable="false" :to="rl('file', {file_path: file.encodedPath})"
+                                         :title="file.fullPath">
+                                <i class="far fa-file fa-1x mr-3 text-muted"></i>
                                 <span v-if="file.name[0]==='.'" class="text-muted">{{file.name}}</span>
                                 <span v-else>{{file.name}}</span>
                             </router-link>
-                            <hr class="mt-1">
                         </div>
                     </template>
 
@@ -92,7 +102,10 @@
                 watchSearch: true,
                 searchTimeOut: -1,
 
-                errorMessage: ''
+                errorMessage: '',
+
+                dragFile: null,
+                dragDestination: null
             };
         },
 
@@ -110,13 +123,11 @@
             search() {
                 if (this.search.length > 0) {
                     if (!this.dirtyByComputer) {
-                        const self = this;
-
                         clearTimeout(this.searchTimeOut);
 
                         // Uncomment these lines to make search slow.
                         // this.searchTimeOut = setTimeout(() => {
-                        self.loadFolder(this.search)
+                        this.loadFolder(this.search)
                         // }, 300);
                     }
 
@@ -126,9 +137,8 @@
         },
 
         mounted() {
-            const self = this;
             setTimeout(() => {
-                self.loadFolder();
+                this.loadFolder();
             }, 300);
         },
 
@@ -142,7 +152,7 @@
                 if (typeof id === "string") {
                     folder = id;
                 } else {
-                    if (this.$route.params.hasOwnProperty('folder_path')) {
+                    if (this.$route.params['folder_path']) {
                         folder = atob(this.$route.params.folder_path);
                     }
 
@@ -151,21 +161,20 @@
                     }
                 }
 
-                const self = this;
                 this.$api.postTo('api/folder/scan', {folder}, {
-                    yes(data) {
-                        self.errorMessage = '';
-                        self.files = data.files;
-                        self.currentFolder = data.folder.replace(/\\/g, '/');
-                        window.dvCurrentFolder = self.currentFolder;
+                    yes: (data) => {
+                        this.errorMessage = '';
+                        this.files = data.files;
+                        this.currentFolder = data.folder.replace(/\\/g, '/');
+                        window.dvCurrentFolder = this.currentFolder;
                     },
 
-                    no(result) {
-                        self.showError(result.data);
+                    no: (result) => {
+                        this.showError(result.data);
                     },
 
-                    any() {
-                        self.isLoading = false;
+                    any: () => {
+                        this.isLoading = false;
                     }
                 })
             },
@@ -203,13 +212,68 @@
 
             showError(msg) {
                 this.errorMessage = msg;
-
-                const self = this;
-
                 setTimeout(() => {
-                    self.errorMessage = '';
+                    this.errorMessage = '';
                 }, 10000);
+            },
+
+            onFileDrag(folder) {
+                this.dragFile = folder;
+            },
+
+            onFileHover() {
+                this.dragDestination = null;
+            },
+
+            onFileDrop() {
+                this.dragDestination = null;
+            },
+
+            dropOnFolder() {
+                if (this.dragFile) {
+                    const folder = this.files[this.dragDestination];
+                    const file = this.files[this.dragFile];
+
+                    this.files.splice(this.dragFile, 1);
+
+                    return this.$api.postTo('api/file/move', {
+                        folder: folder.encodedPath, file: file.encodedPath
+                    }, {
+                        no: () => {
+                            this.files.splice(this.dragFile, 0, file);
+                        }
+                    });
+                }
+            },
+
+            mouseOnFolder(folder) {
+                this.dragDestination = folder;
+            },
+
+            mouseOffFolder() {
+                // this.dragDestination = null;
             }
         }
     }
 </script>
+
+<style lang="scss">
+    .folder-list {
+        padding: 10px;
+        border-bottom: 1px solid fade_out(#999999, 0.7);
+
+        &.on-me {
+            background-color: fade_out(#1d2124, 0.3);
+            border-radius: 7px;
+
+            * {
+                color: antiquewhite !important;
+            }
+        }
+    }
+
+    .file-list {
+        padding: 10px;
+        border-bottom: 1px solid fade_out(#999999, 0.7);
+    }
+</style>

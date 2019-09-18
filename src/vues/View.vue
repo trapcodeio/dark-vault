@@ -19,7 +19,10 @@
                     <h2 class="mb-1">{{fileName}}</h2>
                     <strong class="text-muted">{{file.fullPath}}</strong>
 
-                    <div class="mt-5">
+                    <div v-if="file.type==='image'" class="mt-5 text-center">
+                        <img :src="file.content" class="img-thumbnail">
+                    </div>
+                    <div v-else class="mt-5">
                         <PrismEditor :code="file.content" :language="fileExt" :readonly="true"></PrismEditor>
                     </div>
                 </template>

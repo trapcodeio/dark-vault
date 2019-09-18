@@ -2,14 +2,9 @@ require('dotenv').config();
 const xpresser = require("xpresser");
 
 const env = process.env;
-
-/**
- * Yes am a comment!
- */
-
 xpresser({
     server: {
-      port: env.APP_PORT
+        port: env.APP_PORT
     },
     paths: {
         base: __dirname,
@@ -20,3 +15,6 @@ xpresser({
         cacheFiles: true
     }
 });
+
+// Boot Server
+$.boot();

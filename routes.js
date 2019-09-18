@@ -4,11 +4,14 @@ const route = $.router;
 route.path('/api', () => {
 
     route.path("folder", () => {
-        route.post('@scan')
+        route.post('@scan');
     }).controller('Folder');
 
     route.path("file", () => {
-        route.post('@read')
+
+        route.post('@read');
+        route.post('@move');
+
     }).controller('File');
 
 });
