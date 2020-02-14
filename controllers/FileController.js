@@ -17,8 +17,13 @@ class FileController extends $.controller {
         return {}
     }
 
-    static read(x) {
-        const encodedPath = x.get("file", null);
+    /**
+     *
+     * @param {Xpresser.Http} http
+     * @return {*}
+     */
+    static read(http) {
+        const encodedPath = http.query("file", null);
         const decodedPath = $.base64.decode(encodedPath);
         const exists = fs.existsSync(decodedPath);
         const directory = path.dirname(decodedPath);
@@ -46,7 +51,7 @@ class FileController extends $.controller {
             }
         }
 
-        return x.toApi({
+        return http.toApi({
             type,
             exists,
             fullPath: decodedPath,
@@ -61,16 +66,19 @@ class FileController extends $.controller {
 
     /**
      * Scan Path
-     * @param {XpresserHttp.Engine} x
+     * @param {Xpresser.Http} http
      * @returns {any}
      */
-    static move(x) {
+    static move(http) {
         const neededData = ['file', 'folder'];
-        if (!x.body().exists(neededData)) {
-            return x.toApiFalse({});
+        const body = http.body();
+
+        if (!body.exists(neededData)) {
+            return http.toApiFalse({});
         }
 
-        let {file, folder} = x.body().pick(neededData);
+        let {file, folder} = body.pick(neededData);
+
         file = $.base64.decode(file);
         folder = $.base64.decode(folder);
 
@@ -80,11 +88,9 @@ class FileController extends $.controller {
 
             fs.copyFileSync(file, fileDestination);
             fs.unlinkSync(file);
-
         }
-        // console.log([file, folder]);
 
-        return x.toApi({moved: true});
+        return http.toApi({moved: true});
     }
 }
 

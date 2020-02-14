@@ -1,5 +1,8 @@
 module.exports = {
   root: true,
+  globals: {
+    $: "readonly"
+  },
   env: {
     node: true
   },
@@ -14,4 +17,4 @@ module.exports = {
   parserOptions: {
     parser: 'babel-eslint'
   }
-}
+};

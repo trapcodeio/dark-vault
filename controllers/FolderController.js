@@ -32,12 +32,12 @@ class FolderController extends $.controller {
 
     /**
      * Scan Path
-     * @param {XpresserHttp.Engine} x
+     * @param {Xpresser.Http} http
      * @returns {any}
      */
-    static scan(x) {
+    static scan(http) {
         // eslint-disable-next-line no-undef
-        let hasFolderPath = x.body("folder", false);
+        let hasFolderPath = http.body("folder", false);
         let folder = $.path.base();
 
         if (hasFolderPath !== false) {
@@ -45,13 +45,12 @@ class FolderController extends $.controller {
             hasFolderPath = true;
         }
 
-
         // Resolve folder to match os paths
         folder = path.resolve(slash(folder));
 
 
         if (!fs.existsSync(folder)) {
-            return x.toApiFalse({msg: `Folder does not exists: {${folder}}`})
+            return http.toApiFalse({msg: `Folder does not exists: {${folder}}`})
         }
 
         const folderFiles = fs.readdirSync(folder);
@@ -79,24 +78,24 @@ class FolderController extends $.controller {
                 isDir: fs.lstatSync(fullPath).isDirectory()
             });
         }
-        return x.toApi({files, folder});
+        return http.toApi({files, folder});
     }
 
     /**
      * DistNotFound
-     * @param {XpresserHttp.Engine} x
+     * @param {Xpresser.Http} http
      * @returns {any}
      */
-    distNotFound(x) {
+    distNotFound(http) {
         const msg = "Dist folder not found! Run 'yarn build' to build your files then restart server.";
-        x.res.status(404);
+        http.res.status(404);
 
-        if (x.req.xhr) {
-            return x.toApiFalse({
+        if (http.req.xhr) {
+            return http.toApiFalse({
                 msg
             });
         } else {
-            return x.res.send(msg);
+            return http.res.send(msg);
         }
 
     }

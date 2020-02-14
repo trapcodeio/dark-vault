@@ -19,7 +19,7 @@
     "vue-prism-editor": "^0.2.1",
     "vue-router": "^3.0.3",
     "vue-trap-pack": "^0.0.10",
-    "xpresser": "^0.1.23"
+    "xpresser": "^0.2.11"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.8.0",
@@ -38,5 +38,8 @@
   "main": "server.js",
   "repository": "https://github.com/trapcodeio/dark-vault.git",
   "author": "trapcodeio",
-  "license": "MIT"
+  "license": "MIT",
+  "engines": {
+    "node": ">=10"
+  }
 }

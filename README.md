@@ -4,10 +4,12 @@ A simple folder listing app.
 Will grow by the day.
 
 ## Project setup
-After clone
-1. `yarn install`
-2. `yarn build`
-3. `yarn start` or `xjs start` if you have the xjs-cli installed.
+After cloning this repo.
+
+1. Rename `.env.example` to `.env`
+2. `yarn install`
+3. `yarn build`
+4. `yarn start` or `xjs start` if you have the xjs-cli installed.
 
 ## Note
 Before you start make sure you have`dist` folder.
