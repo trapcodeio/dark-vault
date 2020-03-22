@@ -19,7 +19,7 @@
     "vue-prism-editor": "^0.2.1",
     "vue-router": "^3.0.3",
     "vue-trap-pack": "^0.0.10",
-    "xpresser": "^0.2.11"
+    "xpresser": "^0.2.14"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.8.0",

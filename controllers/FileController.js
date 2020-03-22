@@ -23,7 +23,7 @@ class FileController extends $.controller {
      * @return {*}
      */
     static read(http) {
-        const encodedPath = http.query("file", null);
+        const encodedPath = http.body("file", null);
         const decodedPath = $.base64.decode(encodedPath);
         const exists = fs.existsSync(decodedPath);
         const directory = path.dirname(decodedPath);
