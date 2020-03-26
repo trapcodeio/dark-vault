@@ -71,7 +71,10 @@ class FolderController extends $.controller {
             const fullPath = slash(path.resolve(hasFolderPath ? (folder + '/' + file) : $.path.base(file)));
             const encodedPath = $.base64.encode(fullPath);
             const dots = file.split('.');
-            const ext = dots[dots.length-1];
+            let ext = dots[dots.length-1];
+            if(ext) ext = ext.toLowerCase();
+
+
 
             files.push({
                 name: file,

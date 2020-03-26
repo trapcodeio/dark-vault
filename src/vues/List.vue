@@ -155,6 +155,7 @@
         dmg: 'fad fa-box-open',
 
         mp3: 'fad fa-music',
+        m4a: 'fad fa-music',
         mp4: 'fad fa-video',
         mov: 'fad fa-video',
 
