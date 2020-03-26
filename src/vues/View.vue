@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="card mt-3 mt-lg-5 shadow is-fixed-height">
-            <div class="card-body pt-2">
+            <div class="card-body p-0">
                 <template v-if="isLoading">
                     <div class="text-center mt-5">
                         <div class="spinner-border" role="status">
@@ -10,20 +10,24 @@
                     </div>
                 </template>
                 <template v-else>
-                    <div class="clearfix mb-3">
-                        <router-link :to="rl('folder', {folder_path: file.encodedDirectory})" class="btn btn-dark btn-sm"><i class="fa fa-arrow-left mr-1"></i> Go
-                            Back
-                        </router-link>
-                    </div>
+                    <div class="p-2">
+                        <div class="clearfix mb-3">
+                            <router-link :to="rl('folder', {folder_path: file.encodedDirectory})"
+                                         class="btn btn-dark btn-sm"><i class="fa fa-arrow-left mr-1"></i> Go
+                                Back
+                            </router-link>
+                        </div>
 
-                    <h2 class="mb-1">{{fileName}}</h2>
-                    <strong class="text-muted">{{file.fullPath}}</strong>
+                        <h4 class="mb-1">{{fileName}}</h4>
+                        <small class="text-muted">{{file.fullPath}}</small>
+                    </div>
 
                     <div v-if="file.type==='image'" class="mt-5 text-center">
                         <img :src="file.content" class="img-thumbnail">
                     </div>
                     <div v-else class="mt-5">
-                        <PrismEditor :code="file.content" :language="fileExt" :readonly="true"></PrismEditor>
+                        <PrismEditor :code="file.content" :language="fileExt" :readonly="true"
+                                     :lineNumbers="true" :autoStyleLineNumbers="true"></PrismEditor>
                     </div>
                 </template>
             </div>
@@ -33,7 +37,8 @@
 
 <script>
     import "prismjs"
-    import "prismjs/themes/prism-okaidia.css";
+    import "prismjs/themes/prism-tomorrow.css";
+    import "vue-prism-editor/dist/VuePrismEditor.css";
 
     import PrismEditor from 'vue-prism-editor';
 

@@ -1,3 +1,4 @@
+// import "@fortawesome/fontawesome-pro/css/all.css";
 import "./scss/app.scss";
 
 import Vue from 'vue'
