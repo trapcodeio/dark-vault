@@ -45,7 +45,7 @@
                                 <div class="control">
                                     <input type="text" class="input shadow-sm" placeholder="e.g johndoe@app.com">
                                 </div>
-                                <p class="help">Email is only for important notifications if enabled.</p>
+                                <p class="help">Email is required for password resets only.</p>
                             </div>
 
                             <div class="mt-3">
