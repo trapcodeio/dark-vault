@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
+    "start-dev": "nodemon server.js",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@trapcode/browser-storage": "^0.0.3",
+    "@xpresser/env": "^1.0.3",
     "axios": "^0.19.0",
     "base64-img": "^1.0.4",
     "core-js": "^2.6.5",
@@ -19,21 +21,23 @@
     "vue": "^2.6.10",
     "vue-prism-editor": "^0.2.1",
     "vue-router": "^3.0.3",
-    "vue-trap-pack": "^0.0.35",
-    "xpresser": "^0.2.14"
+    "vue-trap-pack": "^0.0.36",
+    "xpresser": "^0.2.36"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.8.0",
     "@vue/cli-plugin-eslint": "^3.8.0",
     "@vue/cli-service": "^3.9.2",
     "babel-eslint": "^10.0.1",
-    "bootstrap": "^4.3.1",
+    "bulma": "^0.9.0",
     "eslint": "^6.2.2",
     "eslint-plugin-vue": "^5.2.3",
     "node-sass": "^4.12.0",
     "prismjs": "^1.17.1",
     "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.6.10"
+    "shred-bootstrap": "^1.0.2",
+    "vue-template-compiler": "^2.6.10",
+    "vuex": "^3.4.0"
   },
   "description": "A file manager built using xpresser and vue cli",
   "main": "server.js",

@@ -33,6 +33,7 @@ class FileController extends $.controller {
 
 
         const Images = [
+            '.ico',
             '.png',
             '.jpg',
             '.svg',

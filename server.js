@@ -1,20 +1,8 @@
-require('dotenv').config();
+// Import Xpresser
 const xpresser = require("xpresser");
-
-const env = process.env;
-const $ = xpresser({
-    server: {
-        port: env.APP_PORT
-    },
-    paths: {
-        base: __dirname,
-        backend: "base://",
-        public: "dist"
-    },
-    response: {
-        cacheFiles: true
-    }
-});
-
+// Import Configurations
+const config = require('./configs/config');
+// Start Xpresser
+const $ = xpresser(config);
 // Boot Server
 $.boot();

@@ -1,123 +1,114 @@
 <template>
     <div class="container">
-        <div class="card mt-3 mt-lg-5 shadow is-fixed-height">
-            <div class="card-body">
-                <ol v-if="currentFolderToArray.length" class="breadcrumb p-1">
-                    <template v-for="(path, pathId) in currentFolderToArray">
-
-                        <template v-if="currentFolderToArray[pathId+1]===undefined">
-                            <li :key="pathId" class="breadcrumb-item active">
-                                <small>{{path}}</small>
-                            </li>
+        <div class="box mt-3 mt-lg-5 shadow is-fixed-height">
+            <div v-if="currentFolderToArray.length" class="has-background-light p-2">
+                <nav class="breadcrumb" aria-label="breadcrumbs">
+                    <ul>
+                        <template v-for="(path, pathId) in currentFolderToArray">
+                            <template v-if="currentFolderToArray[pathId+1]===undefined">
+                                <li :key="pathId" class="is-active">
+                                    <strong class="ml-2">{{path}}</strong>
+                                </li>
+                            </template>
+                            <template v-else>
+                                <li :key="pathId">
+                                    <a @click.prevent="fromBreadcrumb(pathId)">
+                                        <span>{{path}}</span>
+                                    </a>
+                                </li>
+                            </template>
                         </template>
+                    </ul>
+                </nav>
+            </div>
+            <!--            <ol class="breadcrumb p-1"></ol>-->
 
-                        <template v-else>
-                            <li :key="pathId" class="breadcrumb-item">
-                                <a href="#" @click.prevent="fromBreadcrumb(pathId)">
-                                    <small>{{path}}</small>
-                                </a>
-                            </li>
-                        </template>
-
-                    </template>
-                </ol>
-
-                <template v-if="isLoading">
-                    <div class="text-center">
-                        <div class="spinner-border" role="status">
-                            <span class="sr-only">Loading...</span>
+            <Busy v-if="isLoading"/>
+            <div class="mt-3" v-else>
+                <div class="columns is-multiline">
+                    <div class="column is-narrow">
+                        <button @click.prevent="goBack" class="button is-dark is-outlined is-small is-rounded mt-1"><i
+                                class="fas fa-arrow-left  mr-1"></i> Go Back
+                        </button>
+                    </div>
+                    <div class="column">
+                        <div class="field">
+                            <div class="control">
+                                <input @focusin.prevent="focusedIn" @focusout.prevent="focusedOut" v-model="path"
+                                       type="text" :placeholder="currentFolder"
+                                       class="input shadow-sm">
+                            </div>
                         </div>
+                    </div>
+                    <div class="column is-narrow">
+                        <div class="field">
+                            <input v-model="filter"
+                                   type="search" placeholder="Filter.."
+                                   class="input shadow-sm">
+                        </div>
+                    </div>
+                    <div class="column is-narrow">
+                        <button @click="showMoreOptions=!showMoreOptions"
+                                class="button is-dark is-outlined is-small mt-1">
+                            <i v-if="showMoreOptions" class="fas fa-chevron-up"></i>
+                            <i v-else class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="columns">
+                    <div class="column is-12" v-if="errorMessage.length">
+                        <div class="notification is-danger py-2" role="alert">
+                            <i class="fas fa-exclamation-triangle mr-2"></i> <span v-html="errorMessage"></span>
+
+                            <button @click.prevent="errorMessage=''" class="delete"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <transition name="fade">
+                    <template v-if="showMoreOptions">
+                        <div class="columns mb-3">
+                            <div class="column is-12">
+                                <input v-model="options.showHiddenFiles" type="checkbox" name="showHiddenFiles">
+                                <small class="ml-2">Show hidden files</small>
+                            </div>
+                        </div>
+                    </template>
+                </transition>
+
+                <template v-for="(folder, folderIndex)  in files">
+                    <div :key="folderIndex" v-if="folder.isDir"
+                         @dragenter.prevent="mouseOnFolder(folderIndex)"
+                         @dragleave.prevent="mouseOffFolder(folderIndex)"
+                         @dragover.prevent="() =>false"
+                         @drop="dropOnFolder"
+                         :class="dragDestination===folderIndex?'folder-list on-me':'folder-list'">
+                        <router-link class="dir-link" :draggable="false"
+                                     :to="rl('folder', {folder_path: folder.encodedPath})"
+                                     :title="folder.fullPath">
+                            <i class="fas fa-folder mr-3 has-text-info"></i>
+                            <span>{{folder.name}}</span>
+                        </router-link>
                     </div>
                 </template>
 
-                <div class="mt-3" v-if="!isLoading">
-                    <div class="row">
-                        <div class="col-auto">
-                            <button @click.prevent="goBack" class="btn btn-outline-dark btn-sm mt-1"><i
-                                    class="fas fa-arrow-left "></i> Go Back
-                            </button>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <input @focusin.prevent="focusedIn" @focusout.prevent="focusedOut" v-model="path"
-                                       type="text" :placeholder="currentFolder"
-                                       class="form-control form-control-sm shadow-sm">
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <div class="form-group">
-                                <input v-model="filter"
-                                       type="search" placeholder="Filter.."
-                                       class="form-control form-control-sm shadow-sm">
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <button @click="showMoreOptions=!showMoreOptions" class="btn btn-outline-dark btn-sm mt-1">
-                                <i v-if="showMoreOptions" class="fas fa-chevron-up"></i>
-                                <i v-else class="fas fa-chevron-down"></i>
-                            </button>
-                        </div>
+                <template v-for="(file, fileIndex) in files">
+                    <div :key="fileIndex" v-if="!file.isDir"
+                         draggable="true"
+                         @dragend="onFileDrop"
+                         @dragstart="onFileDrag(fileIndex)"
+                         @dragover="onFileHover"
+                         class="file-list">
+                        <router-link class="file-link" :draggable="false"
+                                     :to="rl('file', {file_path: file.encodedPath})"
+                                     :title="file.fullPath">
+                            <i :class="iconFor(file.ext)"></i>
+                            <span v-if="file.name[0]==='.'" class="has-text-grey">{{file.name}}</span>
+                            <span v-else>{{file.name}}</span>
+                        </router-link>
                     </div>
-
-                    <div class="row">
-                        <div class="col-12" v-if="errorMessage.length">
-                            <div class="alert alert-danger" role="alert">
-                                <i class="fas fa-exclamation-triangle mr-2"></i> <span v-html="errorMessage"></span>
-
-                                <button @click.prevent="errorMessage=''" type="button" class="close"
-                                        data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <transition name="fade">
-                        <template v-if="showMoreOptions">
-                            <div class="row mb-3">
-                                <div class="col-12">
-                                    <input v-model="options.showHiddenFiles" type="checkbox" name="showHiddenFiles">
-                                    <small class="ml-2">Show hidden
-                                        files</small>
-                                </div>
-                            </div>
-                        </template>
-                    </transition>
-
-                    <template v-for="(folder, folderIndex)  in files">
-                        <div :key="folderIndex" v-if="folder.isDir"
-                             @dragenter.prevent="mouseOnFolder(folderIndex)"
-                             @dragleave.prevent="mouseOffFolder(folderIndex)"
-                             @dragover.prevent="() =>false"
-                             @drop="dropOnFolder"
-                             :class="dragDestination===folderIndex?'folder-list on-me':'folder-list'">
-                            <router-link class="dir-link" :draggable="false"
-                                         :to="rl('folder', {folder_path: folder.encodedPath})"
-                                         :title="folder.fullPath">
-                                <i class="fas fa-folder mr-3 text-info"></i>
-                                <span>{{folder.name}}</span>
-                            </router-link>
-                        </div>
-                    </template>
-
-                    <template v-for="(file, fileIndex) in files">
-                        <div :key="fileIndex" v-if="!file.isDir"
-                             draggable="true"
-                             @dragend="onFileDrop"
-                             @dragstart="onFileDrag(fileIndex)"
-                             @dragover="onFileHover"
-                             class="file-list">
-                            <router-link class="file-link" :draggable="false"
-                                         :to="rl('file', {file_path: file.encodedPath})"
-                                         :title="file.fullPath">
-                                <i :class="iconFor(file.ext)"></i>
-                                <span v-if="file.name[0]==='.'" class="text-muted">{{file.name}}</span>
-                                <span v-else>{{file.name}}</span>
-                            </router-link>
-                        </div>
-                    </template>
-
-                </div>
+                </template>
             </div>
         </div>
     </div>
@@ -167,6 +158,7 @@
     const extensionsWithCustomIcons = Object.keys(extensionClass);
 
     export default {
+        name: 'List',
         data() {
             return {
                 isLoading: true,
@@ -257,7 +249,7 @@
                     }
                 }
 
-                this.$api.postTo('api/folder/scan', {folder}, {
+                this.$api.postTo('folder/scan', {folder}, {
                     yes: (data) => {
                         this.errorMessage = '';
                         this.filesFromServer = data.files;

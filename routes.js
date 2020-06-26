@@ -3,10 +3,19 @@ const route = $.router;
 
 route.path('/api', () => {
 
+    // @routes => /api/data/*
+    route.path("data", () => {
+
+        route.get('@config');
+
+    }).controller('Data');
+
+    // @routes => /api/folder/*
     route.path("folder", () => {
         route.post('@scan');
     }).controller('Folder');
 
+    // @routes => /api/file/*
     route.path("file", () => {
 
         route.post('@read');
