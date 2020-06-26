@@ -24,6 +24,10 @@ const DataController = {
             auth = $.$config.path('auth').pick([
                 'enabled'
             ])
+
+            // check if app has any user registered in db.
+            const users = $.db.get(['users']).value();
+            auth.hasUsers = !!(users && users.length);
         }
 
 

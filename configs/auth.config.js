@@ -7,5 +7,5 @@ module.exports = {
      * If Enabled your app will be auth protected.
      * All created users will have to login to access.
      */
-    enabled: false
+    enabled: env['UseAuth']
 };

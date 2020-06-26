@@ -13,7 +13,7 @@ module.exports = {
 
     paths: {
         base: path.resolve(__dirname + '/../'),
-        backend: "base://",
+        backend: "base://backend",
         public: "dist"
     },
 
