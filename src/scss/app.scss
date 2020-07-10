@@ -6,7 +6,7 @@ html, body {
   background-color: $my-dark;
   height: 100vh;
   max-height: 100vh;
-  overflow: hidden;
+  overflow: auto;
 }
 
 ::-webkit-scrollbar {
