@@ -20,14 +20,14 @@
                 <div class="field">
                     <label class="label">Password:</label>
                     <div class="control">
-                        <input v-model="form.password" type="text" class="input shadow-sm" placeholder="Password">
+                        <input v-model="form.password" type="password" class="input shadow-sm" placeholder="Password">
                     </div>
                 </div>
 
                 <div class="field">
                     <label class="label">Confirm Password:</label>
                     <div class="control">
-                        <input v-model="form.confirm_password" type="text" class="input shadow-sm"
+                        <input v-model="form.confirm_password" type="password" class="input shadow-sm"
                                placeholder="Repeat Password">
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <button class="button is-primary is-fullwidth is-medium has-text-weight-bold">
+                    <button @click="addSuperUser" class="button is-primary is-fullwidth is-medium has-text-weight-bold">
                         <i class="fas fa-check mr-2" aria-hidden="true"></i> Proceed
                     </button>
                 </div>
@@ -51,16 +51,39 @@
     </div>
 </template>
 <script>
+    import {Abolish} from "abolish";
+
     export default {
         name: 'AddSuperUser',
         data() {
             return {
                 form: {
-                    username: '',
-                    password: '',
-                    confirm_password: '',
-                    email: ''
+                    username: 'superuser',
+                    password: '123456',
+                    confirm_password: '12345',
+                    email: 'dark@vault.com'
                 }
+            }
+        },
+
+        methods: {
+            addSuperUser() {
+                const {error} = Abolish.validate(this.form, {
+                    username: 'must|minLength:4|maxLength:20',
+                    password: 'must|minLength:6',
+                    confirm_password: {
+                        must: true,
+                        exact: this.form.password,
+                        $error: 'Password and confirmation password does not match!'
+                    },
+                    email: 'must'
+                });
+
+                if (error) {
+                    return this.$toast.error(error.message);
+                }
+
+                return this.$toast.success('Operation successful!')
             }
         }
     }

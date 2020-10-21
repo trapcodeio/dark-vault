@@ -7,6 +7,7 @@ const auth = require('./auth.config');
 
 // Export configurations
 module.exports = {
+    env: env['NODE_ENV'],
     server: {
         port: env['APP_PORT']
     },

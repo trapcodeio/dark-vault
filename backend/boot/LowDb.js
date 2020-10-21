@@ -1,14 +1,13 @@
-/**
- * LowDb and all database initialization file.
- * @param next
- * @return {*}
- */
 const low = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
 const Path = require("xpresser/dist/src/Helpers/Path");
 
 
-// Export boot middleware
+/**
+ * LowDb and all database initialization file.
+ * @param next
+ * @return {*}
+ */
 module.exports = next => {
     // Path to database file.
     const databaseFile = $.path.storage('database/db.json');
