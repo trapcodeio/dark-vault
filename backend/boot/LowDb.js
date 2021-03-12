@@ -6,9 +6,10 @@ const Path = require("xpresser/dist/src/Helpers/Path");
 /**
  * LowDb and all database initialization file.
  * @param next
+ * @param $
  * @return {*}
  */
-module.exports = next => {
+module.exports = (next, $) => {
     // Path to database file.
     const databaseFile = $.path.storage('database/db.json');
 

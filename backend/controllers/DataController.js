@@ -1,12 +1,15 @@
+const {getInstance} = require('xpresser');
+const $ = getInstance();
+
 /**
  * DataController
- * @type {Xpresser.Controller.Object}
  */
 const DataController = {
     // Controller Name
     name: "DataController",
     // Controller Middlewares
     middlewares: {},
+    
     // Controller Default Service Error Handler.
     e: (http, error) => http.toApiFalse({error}),
 
@@ -16,12 +19,12 @@ const DataController = {
      * @param {Xpresser.Http} http
      * @returns {*}
      */
-    config: (http) => {
-        let auth = $.config.auth.enabled || false;
+    config(http){
+        let auth = $.config.get('auth.enabled', false);
 
         // if auth is enabled get auth config needed by frontend
         if (auth) {
-            auth = $.$config.path('auth').pick([
+            auth = $.config.path('auth').pick([
                 'enabled'
             ])
 

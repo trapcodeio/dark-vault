@@ -1,13 +1,16 @@
 const fs = require("fs");
 const path = require("path");
 const base64Img = require('base64-img');
+const {getInstance} = require('xpresser');
+const {ControllerClass} = require('xpresser');
+const $ = getInstance();
 
 /**
  * FileController
  * @class
  * @extends $.controller
  */
-class FileController extends $.controller {
+class FileController extends ControllerClass {
 
     /**
      * middleware - Set Middleware

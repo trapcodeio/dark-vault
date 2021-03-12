@@ -1,5 +1,8 @@
 const fs = require('fs');
+const {getInstance} = require('xpresser');
+const $ = getInstance()
 const route = $.router;
+
 
 route.path('/api', () => {
 

@@ -1,17 +1,16 @@
 // Import Xpresser
-const xpresser = require("xpresser");
+const xpresser = require('xpresser');
 // Import Configurations
 const config = require('./configs/config');
 // Start Xpresser
-const $ = xpresser(config);
+const $ = xpresser.init(config, {exposeDollarSign: false});
 
 /**
  * If Auth is enabled, add StartDb middleware to app.
  */
-if ($.config.auth.enabled) {
-    $.on.start(next => require("./backend/boot/LowDb")(next));
+if ($.config.get('auth.enabled')) {
+  $.on.start((...args) => require('./backend/boot/LowDb')(...args));
 }
-
 
 // Boot Server
 $.boot();
