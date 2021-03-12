@@ -13,7 +13,7 @@
     "@trapcode/browser-storage": "^0.0.7",
     "@xpresser/env": "^1.0.3",
     "abolish": "^0.0.20",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "base64-img": "^1.0.4",
     "core-js": "^3.6.5",
     "dotenv": "^8.0.0",
