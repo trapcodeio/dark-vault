@@ -35,7 +35,7 @@
     "eslint": "^7.11.0",
     "eslint-plugin-vue": "^7.1.0",
     "node-sass": "^4.14.1",
-    "prismjs": "^1.22.0",
+    "prismjs": "^1.24.0",
     "sass-loader": "^10.0.3",
     "shred-bootstrap": "^1.0.2",
     "vue-izitoast": "^1.2.1",
